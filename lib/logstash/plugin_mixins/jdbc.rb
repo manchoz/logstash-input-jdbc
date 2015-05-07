@@ -10,6 +10,7 @@ module LogStash::PluginMixins::Jdbc
 
   # This method is called when someone includes this module
   def self.included(base)
+    require 'time'
     # Add these methods to the 'base' given.
     base.extend(self)
     base.setup_jdbc_config

@@ -59,6 +59,8 @@ class LogStash::Inputs::Jdbc < LogStash::Inputs::Base
   # for example: "* * * * *" (execute query every minute, on the minute)
   config :schedule, :validate => :string
 
+  config :sql_init_start, :validate => :string
+
   public
 
   def register
@@ -89,7 +91,7 @@ class LogStash::Inputs::Jdbc < LogStash::Inputs::Base
   private
   def execute_query(queue)
     # update default parameters
-    @parameters['sql_last_start'] = @sql_last_start
+    @parameters['sql_last_start'] = @sql_last_start.nil? ? ( @sql_init_start.nil? ? Time.at(0).utc : Time.parse(@sql_init_start).utc ) : @sql_last_start
     execute_statement(@statement, @parameters) do |row|
       event = LogStash::Event.new(row)
       decorate(event)
