@@ -70,6 +70,17 @@ module LogStash::PluginMixins::Jdbc
   end
 
   public
+  def prepare_statement
+    if @statement.start_with? "file:"
+      query_filename = String.new(@statement)
+      query_filename.slice! "file:"
+      query_file = File.open(query_filename,"rb")
+      @statement = query_file.read
+      query_file.close
+    end
+  end
+
+  public
   def execute_statement(statement, parameters)
     success = false
     begin 

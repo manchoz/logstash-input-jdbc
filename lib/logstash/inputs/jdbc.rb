@@ -64,6 +64,7 @@ class LogStash::Inputs::Jdbc < LogStash::Inputs::Base
   def register
     require "rufus/scheduler"
     prepare_jdbc_connection()
+    prepare_statement()
   end # def register
 
   def run(queue)
