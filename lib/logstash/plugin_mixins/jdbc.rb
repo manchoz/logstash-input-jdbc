@@ -76,7 +76,7 @@ module LogStash::PluginMixins::Jdbc
       query_filename = String.new(@statement)
       query_filename.slice! "file:"
       query_file = File.open(query_filename,"rb")
-      @statement = query_file.read
+      @statement = query_file.read.gsub(/\s+/, ' ').gsub(/\'/,'$$').strip
       query_file.close
     end
   end
